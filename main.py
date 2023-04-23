@@ -21,8 +21,9 @@ game_over = False
 car_speed = 10
 
 # Завантаження зображень
-background_image = "bg.png"
+background_image = pygame.transform.scale(pygame.image.load("bg.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
 car_image = "car.png"
+
 
 # Розміри автомобіля
 car_width = 100
@@ -64,7 +65,6 @@ while not game_over:
     
     # Очищення екрану
     screen.fill(WHITE)
-    
     # Відображення зображень
     screen.blit(background_image, (0, 0))
     screen.blit(car_image, (car_x, car_y))
