@@ -21,12 +21,12 @@ game_over = False
 car_speed = 10
 
 # Завантаження зображень
-background_image = pygame.image.load("background.png").convert_alpha()
-car_image = pygame.image.load("car.png").convert_alpha()
+background_image = "bg.png"
+car_image = "car.png"
 
 # Розміри автомобіля
-car_width = car_image.get_width()
-car_height = car_image.get_height()
+car_width = 100
+car_height = 200
 
 # Початкові координати автомобіля
 car_x = (SCREEN_WIDTH / 2) - (car_width / 2)
