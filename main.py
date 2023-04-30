@@ -1,77 +1,82 @@
-import pygame
-import random
+from pygame import *
 
-# Ініціалізація Pygame
-pygame.init()
+#створи вікно гри
+window = display.set_mode((700, 500))
+display.set_caption('гонки')
 
-# Колір екрану
-WHITE = (255, 255, 255)
+background_image = image.load("background.png")
 
-# Розміри екрану
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+background = transform.scale(background_image, (700, 500))
 
-# Створення екрану
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+background_width = background.get_width()
+background_height = background.get_height()
 
-# Завершення гри
-game_over = False
+tiles = 2 
 
-# Швидкість автомобіля
-car_speed = 10
+scroll = 0
 
-# Завантаження зображень
-background_image = pygame.transform.scale(pygame.image.load("bg.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
-car_image = "car.png"
+speed = 5
 
+car1_image = transform.scale(
+    image.load("car1.png"),
+    (100, 100))
+car2_image = transform.scale(
+    image.load('car2.png'),
+    (100, 100))
 
-# Розміри автомобіля
-car_width = 100
-car_height = 200
+x1 = 50
+y1 = 50
 
-# Початкові координати автомобіля
-car_x = (SCREEN_WIDTH / 2) - (car_width / 2)
-car_y = SCREEN_HEIGHT - car_height - 10
+x2, y2 = 50, 350
 
-# Створення перешкод
-obstacle_width = 100
-obstacle_height = 100
-obstacle_x = random.randint(0, SCREEN_WIDTH - obstacle_width)
-obstacle_y = -obstacle_height
+game = True
 
-# Головний цикл гри
-while not game_over:
-    # Обробка подій
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game_over = True
+clock = time.Clock()
+
+while game:
+    window.blit(background, (0,0))
+    window.blit(car1_image,(x1,y1))
+    window.blit(car2_image,(x2,y2))
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+        if e.type == KEYDOWN:
+            if e.key == K_LEFT:
+                scroll -= 5
     
-    # Обробка руху автомобіля
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        car_x -= car_speed
-    if keys[pygame.K_RIGHT]:
-        car_x += car_speed
+        for i in range(0, tiles):
+            window.blit(background, (i * background_width + scroll, 0))
     
-    # Обробка руху перешкод
-    obstacle_y += car_speed / 2
-    if obstacle_y > SCREEN_HEIGHT:
-        obstacle_x = random.randint(0, SCREEN_WIDTH - obstacle_width)
-        obstacle_y = -obstacle_height
+        if abs(scroll) > background_width:
+            scroll = 0
+        scroll -= 5
+
+    keys_pressed = key.get_pressed()
+
+    if keys_pressed[K_LEFT] and x1 > 5:
+        x1 -= speed
+
+    if keys_pressed[K_RIGHT] and x1 < 595:
+        x1 += speed
+
+    if keys_pressed[K_UP] and y1 > 5:
+        y1 -= speed
+
+    if keys_pressed[K_DOWN] and y1 < 595:
+        y1 += speed
+
+    if keys_pressed[K_a] and x2 > 5:
+        x2 -= speed
+
+    if keys_pressed[K_d] and x2 < 595:
+        x2 += speed 
     
-    # Перевірка на зіткнення
-    if car_x < obstacle_x + obstacle_width and car_x + car_width > obstacle_x and car_y < obstacle_y + obstacle_height and car_y + car_height > obstacle_y:
-        game_over = True
-    
-    # Очищення екрану
-    screen.fill(WHITE)
-    # Відображення зображень
-    screen.blit(background_image, (0, 0))
-    screen.blit(car_image, (car_x, car_y))
-    pygame.draw.rect(screen, (255, 0, 0), (obstacle_x, obstacle_y, obstacle_width, obstacle_height))
-    
-    # Оновлення екрану
-    pygame.display.update()
-    
-# Завершення Pygame
-pygame.quit()
+    if keys_pressed[K_w] and y2 > 5:
+        y2 -= speed
+
+    if keys_pressed[K_s] and y2 < 395:
+        y2 += speed
+
+    display.update()
+    clock.tick(60)
+
