@@ -39,22 +39,24 @@ while game:
     for i in range(0, tiles):
         window.blit(background, (i * background_width + scroll, 0))
 
+
+ 
     if pausa:
         window.fill((0,0,0))
         if btn1.draw(window):
-            game = False 
-        if btn2.draw(window):
             pausa = False
+        if btn2.draw(window):
+            game = False 
+    else:
+
+        if abs(scroll) > background_width:
+            scroll = 0
+        scroll -= 5
             
-    if abs(scroll) > background_width:
-        scroll = 0
-    scroll -= 5
-        
-    car1.draw(window)
-    car1.move1()
-    car2.draw(window)
-    car2.move2()
+        car1.draw(window)
+        car1.move1()
+        car2.draw(window)
+        car2.move2()
 
     display.update()
     clock.tick(60)
-
